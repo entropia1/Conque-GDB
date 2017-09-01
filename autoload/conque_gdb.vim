@@ -499,7 +499,12 @@ function! conque_gdb#toggle_breakpoint(fullfile, line)
     if bufloaded(s:gdb.buffer_number) || s:gdb.active
         sil exe s:py . ' ' . s:gdb.var . '.vim_toggle_breakpoint("' . s:escape_to_py_file(a:fullfile) .'","'. a:line .'")'
     endif
-    call conque_gdb#command(l:command . a:fullfile . ':' . a:line)
+    if a:fullfile =~ g:ConqueGdb_SrcFilePrefixPattern
+      let l:actualfile = substitute(a:fullfile, g:ConqueGdb_SrcFilePrefixPattern, "", '')
+    else
+      let l:actualfile = a:fullfile
+    endif
+    call conque_gdb#command(l:command . l:actualfile . ':' . a:line)
 endfunction
 
 " Restore state of script to indicate gdb has terminated
