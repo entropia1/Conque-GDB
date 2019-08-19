@@ -8,8 +8,13 @@ def exit_handler(event):
 
 def prompt_hook(prompt):
     print('\x1a\x18')
-    gdb.execute('interp mi "-break-list"')
+    # if prompt_hook.__first:
+    #     prompt_hook.__first = False
+    # else:
+    #     gdb.execute('interp mi "-break-list"')
     print('\x1a\x18')
+
+prompt_hook.__first = True
 
 gdb.events.exited.connect(exit_handler)
 gdb.prompt_hook = prompt_hook
